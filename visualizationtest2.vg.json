@@ -1,0 +1,289 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "background": "white",
+  "padding": 5,
+  "height": 250,
+  "data": [
+    {"name": "selector010_store"},
+    {
+      "name": "source_0",
+      "url": "https://raw.githubusercontent.com/bamartin24/Charts/main/altair-data-39984567ef85e531bf1faa2d45240d4d.json",
+      "format": {"type": "json"}
+    },
+    {
+      "name": "data_0",
+      "source": "source_0",
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": ["Rarity"],
+          "ops": ["mean"],
+          "fields": ["sale price (USD)"],
+          "as": ["mean_sale price (USD)"]
+        },
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"mean_sale price (USD)\"]) && isFinite(+datum[\"mean_sale price (USD)\"])"
+        }
+      ]
+    },
+    {
+      "name": "data_1",
+      "source": "source_0",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "!length(data(\"selector010_store\")) || vlSelectionTest(\"selector010_store\", datum)"
+        },
+        {
+          "type": "aggregate",
+          "groupby": ["Category"],
+          "ops": ["mean"],
+          "fields": ["sale price (USD)"],
+          "as": ["mean_sale price (USD)"]
+        },
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"mean_sale price (USD)\"]) && isFinite(+datum[\"mean_sale price (USD)\"])"
+        }
+      ]
+    }
+  ],
+  "signals": [
+    {"name": "childWidth", "value": 250},
+    {
+      "name": "unit",
+      "value": {},
+      "on": [
+        {"events": "mousemove", "update": "isTuple(group()) ? group() : unit"}
+      ]
+    },
+    {
+      "name": "selector010",
+      "update": "vlSelectionResolve(\"selector010_store\", \"union\", true, true)"
+    }
+  ],
+  "layout": {"padding": 20, "bounds": "full", "align": "each"},
+  "marks": [
+    {
+      "type": "group",
+      "name": "concat_0_group",
+      "style": "cell",
+      "encode": {
+        "update": {
+          "width": {"signal": "childWidth"},
+          "height": {"signal": "height"}
+        }
+      },
+      "signals": [
+        {
+          "name": "selector010_tuple",
+          "on": [
+            {
+              "events": [{"source": "scope", "type": "click"}],
+              "update": "datum && item().mark.marktype !== 'group' && indexof(item().mark.role, 'legend') < 0 ? {unit: \"concat_0\", fields: selector010_tuple_fields, values: [(item().isVoronoi ? datum.datum : datum)[\"Rarity\"]]} : null",
+              "force": true
+            },
+            {
+              "events": [{"source": "view", "type": "dblclick"}],
+              "update": "null"
+            }
+          ]
+        },
+        {
+          "name": "selector010_tuple_fields",
+          "value": [{"type": "E", "field": "Rarity"}]
+        },
+        {
+          "name": "selector010_toggle",
+          "value": false,
+          "on": [
+            {
+              "events": [{"source": "scope", "type": "click"}],
+              "update": "event.shiftKey"
+            },
+            {
+              "events": [{"source": "view", "type": "dblclick"}],
+              "update": "false"
+            }
+          ]
+        },
+        {
+          "name": "selector010_modify",
+          "on": [
+            {
+              "events": {"signal": "selector010_tuple"},
+              "update": "modify(\"selector010_store\", selector010_toggle ? null : selector010_tuple, selector010_toggle ? null : true, selector010_toggle ? selector010_tuple : null)"
+            }
+          ]
+        }
+      ],
+      "marks": [
+        {
+          "name": "concat_0_marks",
+          "type": "rect",
+          "style": ["bar"],
+          "interactive": true,
+          "from": {"data": "data_0"},
+          "encode": {
+            "update": {
+              "fill": [
+                {
+                  "test": "!length(data(\"selector010_store\")) || vlSelectionTest(\"selector010_store\", datum)",
+                  "value": "orange"
+                },
+                {"value": "lightgrey"}
+              ],
+              "ariaRoleDescription": {"value": "bar"},
+              "description": {
+                "signal": "\"Rarity: \" + (isValid(datum[\"Rarity\"]) ? datum[\"Rarity\"] : \"\"+datum[\"Rarity\"]) + \"; Mean of sale price (USD): \" + (format(datum[\"mean_sale price (USD)\"], \"\"))"
+              },
+              "x": {"scale": "concat_0_x", "field": "Rarity"},
+              "width": {"signal": "max(0.25, bandwidth('concat_0_x'))"},
+              "y": {"scale": "concat_0_y", "field": "mean_sale price (USD)"},
+              "y2": {"scale": "concat_0_y", "value": 0}
+            }
+          }
+        }
+      ],
+      "axes": [
+        {
+          "scale": "concat_0_y",
+          "orient": "left",
+          "gridScale": "concat_0_x",
+          "grid": true,
+          "tickCount": {"signal": "ceil(height/40)"},
+          "domain": false,
+          "labels": false,
+          "aria": false,
+          "maxExtent": 0,
+          "minExtent": 0,
+          "ticks": false,
+          "zindex": 0
+        },
+        {
+          "scale": "concat_0_x",
+          "orient": "bottom",
+          "grid": false,
+          "title": "Rarity",
+          "labelAlign": "right",
+          "labelAngle": 270,
+          "labelBaseline": "middle",
+          "zindex": 0
+        },
+        {
+          "scale": "concat_0_y",
+          "orient": "left",
+          "grid": false,
+          "title": "Mean of sale price (USD)",
+          "labelOverlap": true,
+          "tickCount": {"signal": "ceil(height/40)"},
+          "zindex": 0
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "name": "concat_1_group",
+      "style": "cell",
+      "encode": {
+        "update": {
+          "width": {"signal": "childWidth"},
+          "height": {"signal": "height"}
+        }
+      },
+      "marks": [
+        {
+          "name": "concat_1_marks",
+          "type": "rect",
+          "style": ["bar"],
+          "interactive": false,
+          "from": {"data": "data_1"},
+          "encode": {
+            "update": {
+              "fill": {"value": "#4c78a8"},
+              "ariaRoleDescription": {"value": "bar"},
+              "description": {
+                "signal": "\"Category: \" + (isValid(datum[\"Category\"]) ? datum[\"Category\"] : \"\"+datum[\"Category\"]) + \"; Mean of sale price (USD): \" + (format(datum[\"mean_sale price (USD)\"], \"\"))"
+              },
+              "x": {"scale": "concat_1_x", "field": "Category"},
+              "width": {"signal": "max(0.25, bandwidth('concat_1_x'))"},
+              "y": {"scale": "concat_1_y", "field": "mean_sale price (USD)"},
+              "y2": {"scale": "concat_1_y", "value": 0}
+            }
+          }
+        }
+      ],
+      "axes": [
+        {
+          "scale": "concat_1_y",
+          "orient": "left",
+          "gridScale": "concat_1_x",
+          "grid": true,
+          "tickCount": {"signal": "ceil(height/40)"},
+          "domain": false,
+          "labels": false,
+          "aria": false,
+          "maxExtent": 0,
+          "minExtent": 0,
+          "ticks": false,
+          "zindex": 0
+        },
+        {
+          "scale": "concat_1_x",
+          "orient": "bottom",
+          "grid": false,
+          "title": "Category",
+          "labelAlign": "right",
+          "labelAngle": 270,
+          "labelBaseline": "middle",
+          "zindex": 0
+        },
+        {
+          "scale": "concat_1_y",
+          "orient": "left",
+          "grid": false,
+          "title": "Mean of sale price (USD)",
+          "labelOverlap": true,
+          "tickCount": {"signal": "ceil(height/40)"},
+          "zindex": 0
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "concat_0_x",
+      "type": "band",
+      "domain": {"data": "data_0", "field": "Rarity", "sort": true},
+      "range": [0, {"signal": "childWidth"}],
+      "paddingInner": 0.1,
+      "paddingOuter": 0.05
+    },
+    {
+      "name": "concat_0_y",
+      "type": "linear",
+      "domain": {"data": "data_0", "field": "mean_sale price (USD)"},
+      "range": [{"signal": "height"}, 0],
+      "nice": true,
+      "zero": true
+    },
+    {
+      "name": "concat_1_x",
+      "type": "band",
+      "domain": {"data": "data_1", "field": "Category", "sort": true},
+      "range": [0, {"signal": "childWidth"}],
+      "paddingInner": 0.1,
+      "paddingOuter": 0.05
+    },
+    {
+      "name": "concat_1_y",
+      "type": "linear",
+      "domain": {"data": "data_1", "field": "mean_sale price (USD)"},
+      "range": [{"signal": "height"}, 0],
+      "nice": true,
+      "zero": true
+    }
+  ],
+  "config": {}
+}
