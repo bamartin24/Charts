@@ -1,0 +1,351 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "background": "white",
+  "padding": 5,
+  "width": 700,
+  "height": 500,
+  "title": {
+    "text": "Average Sale Price Per Parcel By Quarter and Plaza",
+    "frame": "group"
+  },
+  "style": "cell",
+  "data": [
+    {"name": "selector206_store"},
+    {"name": "selector207_store"},
+    {
+      "name": "source_0",
+      "url": "https://raw.githubusercontent.com/bamartin24/Charts/main/DecentralandAnalysis/altair-data-3440a0ef57942fb8bd8669f83e679524.json",
+      "format": {"type": "json"},
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": ["Q Y", "Closest Plaza"],
+          "ops": ["mean", "count"],
+          "fields": ["sale price (USD) per parcel", null],
+          "as": ["mean_sale price (USD) per parcel", "__count"]
+        },
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"mean_sale price (USD) per parcel\"]) && isFinite(+datum[\"mean_sale price (USD) per parcel\"])"
+        }
+      ]
+    }
+  ],
+  "signals": [
+    {
+      "name": "unit",
+      "value": {},
+      "on": [
+        {"events": "mousemove", "update": "isTuple(group()) ? group() : unit"}
+      ]
+    },
+    {
+      "name": "selector206_Closest_Plaza_legend",
+      "value": null,
+      "on": [
+        {
+          "events": [
+            {
+              "source": "view",
+              "type": "click",
+              "markname": "Closest_Plaza_legend_symbols"
+            },
+            {
+              "source": "view",
+              "type": "click",
+              "markname": "Closest_Plaza_legend_labels"
+            },
+            {
+              "source": "view",
+              "type": "click",
+              "markname": "Closest_Plaza_legend_entries"
+            }
+          ],
+          "update": "datum.value || item().items[0].items[0].datum.value",
+          "force": true
+        },
+        {
+          "events": [{"source": "view", "type": "click"}],
+          "update": "!event.item || !datum ? null : selector206_Closest_Plaza_legend",
+          "force": true
+        }
+      ]
+    },
+    {
+      "name": "selector206",
+      "update": "vlSelectionResolve(\"selector206_store\", \"union\", true, true)"
+    },
+    {
+      "name": "selector207",
+      "update": "vlSelectionResolve(\"selector207_store\", \"union\")"
+    },
+    {
+      "name": "selector206_tuple",
+      "update": "selector206_Closest_Plaza_legend !== null ? {fields: selector206_tuple_fields, values: [selector206_Closest_Plaza_legend]} : null"
+    },
+    {
+      "name": "selector206_tuple_fields",
+      "value": [{"type": "E", "field": "Closest Plaza"}]
+    },
+    {
+      "name": "selector206_toggle",
+      "value": false,
+      "on": [
+        {
+          "events": {"merge": [{"source": "view", "type": "click"}]},
+          "update": "event.shiftKey"
+        }
+      ]
+    },
+    {
+      "name": "selector206_modify",
+      "on": [
+        {
+          "events": {"signal": "selector206_tuple"},
+          "update": "modify(\"selector206_store\", selector206_toggle ? null : selector206_tuple, selector206_toggle ? null : true, selector206_toggle ? selector206_tuple : null)"
+        }
+      ]
+    },
+    {
+      "name": "selector207_Q_Y",
+      "on": [
+        {"events": [{"source": "view", "type": "dblclick"}], "update": "null"},
+        {
+          "events": {"signal": "selector207_translate_delta"},
+          "update": "panLinear(selector207_translate_anchor.extent_x, -selector207_translate_delta.x / width)"
+        },
+        {
+          "events": {"signal": "selector207_zoom_delta"},
+          "update": "zoomLinear(domain(\"x\"), selector207_zoom_anchor.x, selector207_zoom_delta)"
+        }
+      ]
+    },
+    {
+      "name": "selector207_tuple",
+      "on": [
+        {
+          "events": [{"signal": "selector207_Q_Y"}],
+          "update": "selector207_Q_Y ? {unit: \"\", fields: selector207_tuple_fields, values: [selector207_Q_Y]} : null"
+        }
+      ]
+    },
+    {
+      "name": "selector207_tuple_fields",
+      "value": [{"field": "Q Y", "channel": "x", "type": "E"}]
+    },
+    {
+      "name": "selector207_translate_anchor",
+      "value": {},
+      "on": [
+        {
+          "events": [{"source": "scope", "type": "mousedown"}],
+          "update": "{x: x(unit), y: y(unit), extent_x: domain(\"x\")}"
+        }
+      ]
+    },
+    {
+      "name": "selector207_translate_delta",
+      "value": {},
+      "on": [
+        {
+          "events": [
+            {
+              "source": "window",
+              "type": "mousemove",
+              "consume": true,
+              "between": [
+                {"source": "scope", "type": "mousedown"},
+                {"source": "window", "type": "mouseup"}
+              ]
+            }
+          ],
+          "update": "{x: selector207_translate_anchor.x - x(unit), y: selector207_translate_anchor.y - y(unit)}"
+        }
+      ]
+    },
+    {
+      "name": "selector207_zoom_anchor",
+      "on": [
+        {
+          "events": [{"source": "scope", "type": "wheel", "consume": true}],
+          "update": "{x: invert(\"x\", x(unit)), y: invert(\"y\", y(unit))}"
+        }
+      ]
+    },
+    {
+      "name": "selector207_zoom_delta",
+      "on": [
+        {
+          "events": [{"source": "scope", "type": "wheel", "consume": true}],
+          "force": true,
+          "update": "pow(1.001, event.deltaY * pow(16, event.deltaMode))"
+        }
+      ]
+    },
+    {
+      "name": "selector207_modify",
+      "on": [
+        {
+          "events": {"signal": "selector207_tuple"},
+          "update": "modify(\"selector207_store\", selector207_tuple, true)"
+        }
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "name": "marks",
+      "type": "symbol",
+      "style": ["circle"],
+      "interactive": true,
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "fill": {"scale": "color", "field": "Closest Plaza"},
+          "opacity": [
+            {
+              "test": "!length(data(\"selector206_store\")) || vlSelectionTest(\"selector206_store\", datum)",
+              "value": 1
+            },
+            {"value": 0.2}
+          ],
+          "tooltip": {
+            "signal": "{\"Closest Plaza\": isValid(datum[\"Closest Plaza\"]) ? datum[\"Closest Plaza\"] : \"\"+datum[\"Closest Plaza\"], \"Mean of sale price (USD) per parcel\": format(datum[\"mean_sale price (USD) per parcel\"], \".0f\"), \"Number of Transactions\": format(datum[\"__count\"], \"\")}"
+          },
+          "ariaRoleDescription": {"value": "circle"},
+          "description": {
+            "signal": "\"Year Quarter: \" + (isValid(datum[\"Q Y\"]) ? datum[\"Q Y\"] : \"\"+datum[\"Q Y\"]) + \"; Average sale price per parcel (USD): \" + (format(datum[\"mean_sale price (USD) per parcel\"], \"\")) + \"; Closest Plaza: \" + (isValid(datum[\"Closest Plaza\"]) ? datum[\"Closest Plaza\"] : \"\"+datum[\"Closest Plaza\"]) + \"; Number of Transactions: \" + (format(datum[\"__count\"], \"\")) + \"; Mean of sale price (USD) per parcel: \" + (format(datum[\"mean_sale price (USD) per parcel\"], \".0f\"))"
+          },
+          "x": {"scale": "x", "field": "Q Y"},
+          "y": {"scale": "y", "field": "mean_sale price (USD) per parcel"},
+          "size": {"scale": "size", "field": "__count"},
+          "shape": {"value": "circle"}
+        }
+      }
+    }
+  ],
+  "scales": [
+    {
+      "name": "x",
+      "type": "point",
+      "domain": {"data": "source_0", "field": "Q Y", "sort": true},
+      "range": [0, {"signal": "width"}],
+      "padding": 0.5
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "domain": {
+        "data": "source_0",
+        "field": "mean_sale price (USD) per parcel"
+      },
+      "range": [{"signal": "height"}, 0],
+      "nice": true,
+      "zero": true
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": {"data": "source_0", "field": "Closest Plaza", "sort": true},
+      "range": "category"
+    },
+    {
+      "name": "size",
+      "type": "linear",
+      "domain": {"data": "source_0", "field": "__count"},
+      "range": [0, 361],
+      "zero": true
+    }
+  ],
+  "axes": [
+    {
+      "scale": "y",
+      "orient": "left",
+      "gridScale": "x",
+      "grid": true,
+      "tickCount": {"signal": "ceil(height/40)"},
+      "domain": false,
+      "labels": false,
+      "aria": false,
+      "maxExtent": 0,
+      "minExtent": 0,
+      "ticks": false,
+      "zindex": 0
+    },
+    {
+      "scale": "x",
+      "orient": "bottom",
+      "grid": false,
+      "title": "Year Quarter",
+      "labelAlign": "right",
+      "labelAngle": 270,
+      "labelBaseline": "middle",
+      "zindex": 0
+    },
+    {
+      "scale": "y",
+      "orient": "left",
+      "grid": false,
+      "title": "Average sale price per parcel (USD)",
+      "labelOverlap": true,
+      "tickCount": {"signal": "ceil(height/40)"},
+      "zindex": 0
+    }
+  ],
+  "legends": [
+    {
+      "fill": "color",
+      "symbolType": "circle",
+      "title": "Closest Plaza",
+      "encode": {
+        "labels": {
+          "name": "Closest_Plaza_legend_labels",
+          "interactive": true,
+          "update": {
+            "opacity": [
+              {
+                "test": "(!length(data(\"selector206_store\")) || (selector206[\"Closest Plaza\"] && indexof(selector206[\"Closest Plaza\"], datum.value) >= 0))",
+                "value": 1
+              },
+              {"value": 0.35}
+            ]
+          }
+        },
+        "symbols": {
+          "name": "Closest_Plaza_legend_symbols",
+          "interactive": true,
+          "update": {
+            "opacity": [
+              {
+                "test": "(!length(data(\"selector206_store\")) || (selector206[\"Closest Plaza\"] && indexof(selector206[\"Closest Plaza\"], datum.value) >= 0))",
+                "value": 1
+              },
+              {"value": 0.35}
+            ]
+          }
+        },
+        "entries": {
+          "name": "Closest_Plaza_legend_entries",
+          "interactive": true,
+          "update": {"fill": {"value": "transparent"}}
+        }
+      }
+    },
+    {
+      "title": "Number of Transactions",
+      "size": "size",
+      "symbolType": "circle",
+      "encode": {
+        "symbols": {
+          "update": {
+            "fill": {"value": "black"},
+            "fillOpacity": {"value": 1},
+            "opacity": {"value": 1},
+            "stroke": {"value": "transparent"}
+          }
+        }
+      }
+    }
+  ],
+  "config": {}
+}
