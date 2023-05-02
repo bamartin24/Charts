@@ -1,0 +1,509 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "background": "white",
+  "padding": 5,
+  "data": [
+    {"name": "selector227_store"},
+    {"name": "selector228_store"},
+    {
+      "name": "source_0",
+      "url": "altair-data-3440a0ef57942fb8bd8669f83e679524.json",
+      "format": {"type": "json", "parse": {"Date": "date"}}
+    },
+    {
+      "name": "data_0",
+      "source": "source_0",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "!length(data(\"selector227_store\")) || vlSelectionTest(\"selector227_store\", datum)"
+        },
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"X\"]) && isFinite(+datum[\"X\"]) && isValid(datum[\"Y\"]) && isFinite(+datum[\"Y\"]) && isValid(datum[\"sale price (USD) per parcel\"]) && isFinite(+datum[\"sale price (USD) per parcel\"])"
+        }
+      ]
+    },
+    {
+      "name": "source_1",
+      "url": "altair-data-f6a0397d736440357bb470ba0772c322.json",
+      "format": {"type": "json"},
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"X\"]) && isFinite(+datum[\"X\"]) && isValid(datum[\"Y\"]) && isFinite(+datum[\"Y\"])"
+        }
+      ]
+    },
+    {
+      "name": "source_2",
+      "url": "altair-data-77fc6fe407f9d0206dfb59fe12088bf7.json",
+      "format": {"type": "json"},
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"X\"]) && isFinite(+datum[\"X\"]) && isValid(datum[\"Y\"]) && isFinite(+datum[\"Y\"])"
+        }
+      ]
+    },
+    {
+      "name": "source_3",
+      "url": "altair-data-5d2fe6027d2e5b9ebd39e289a69886e6.json",
+      "format": {"type": "json"},
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"X\"]) && isFinite(+datum[\"X\"]) && isValid(datum[\"Y\"]) && isFinite(+datum[\"Y\"])"
+        }
+      ]
+    }
+  ],
+  "signals": [
+    {"name": "concat_0_width", "value": 20},
+    {"name": "concat_0_y_step", "value": 20},
+    {
+      "name": "concat_0_height",
+      "update": "bandspace(domain('concat_0_y').length, 0, 0) * concat_0_y_step"
+    },
+    {"name": "concat_1_width", "value": 600},
+    {"name": "concat_1_height", "value": 600},
+    {
+      "name": "unit",
+      "value": {},
+      "on": [
+        {"events": "mousemove", "update": "isTuple(group()) ? group() : unit"}
+      ]
+    },
+    {
+      "name": "selector227",
+      "update": "vlSelectionResolve(\"selector227_store\", \"union\", true, true)"
+    },
+    {
+      "name": "selector228",
+      "update": "{\"X\": selector228_X, \"Y\": selector228_Y}"
+    },
+    {"name": "selector228_X"},
+    {"name": "selector228_Y"}
+  ],
+  "layout": {"padding": 20, "bounds": "full", "align": "each"},
+  "marks": [
+    {
+      "type": "group",
+      "name": "concat_0_group",
+      "style": "cell",
+      "encode": {
+        "update": {
+          "width": {"signal": "concat_0_width"},
+          "height": {"signal": "concat_0_height"}
+        }
+      },
+      "signals": [
+        {"name": "width", "update": "concat_0_width"},
+        {
+          "name": "selector227_tuple",
+          "on": [
+            {
+              "events": [{"source": "scope", "type": "click"}],
+              "update": "datum && item().mark.marktype !== 'group' && indexof(item().mark.role, 'legend') < 0 ? {unit: \"concat_0\", fields: selector227_tuple_fields, values: [(item().isVoronoi ? datum.datum : datum)[\"year\"]]} : null",
+              "force": true
+            },
+            {
+              "events": [{"source": "view", "type": "dblclick"}],
+              "update": "null"
+            }
+          ]
+        },
+        {
+          "name": "selector227_tuple_fields",
+          "value": [{"type": "E", "field": "year"}]
+        },
+        {
+          "name": "selector227_toggle",
+          "value": false,
+          "on": [
+            {
+              "events": [{"source": "scope", "type": "click"}],
+              "update": "event.shiftKey"
+            },
+            {
+              "events": [{"source": "view", "type": "dblclick"}],
+              "update": "false"
+            }
+          ]
+        },
+        {
+          "name": "selector227_modify",
+          "on": [
+            {
+              "events": {"signal": "selector227_tuple"},
+              "update": "modify(\"selector227_store\", selector227_toggle ? null : selector227_tuple, selector227_toggle ? null : true, selector227_toggle ? selector227_tuple : null)"
+            }
+          ]
+        }
+      ],
+      "marks": [
+        {
+          "name": "concat_0_marks",
+          "type": "rect",
+          "style": ["rect"],
+          "interactive": true,
+          "from": {"data": "source_0"},
+          "encode": {
+            "update": {
+              "fill": [
+                {
+                  "test": "!length(data(\"selector227_store\")) || vlSelectionTest(\"selector227_store\", datum)",
+                  "scale": "concat_0_color",
+                  "field": "year"
+                },
+                {"value": "lightgray"}
+              ],
+              "description": {
+                "signal": "\"Filter by Year: \" + (isValid(datum[\"year\"]) ? datum[\"year\"] : \"\"+datum[\"year\"]) + \"; year: \" + (isValid(datum[\"year\"]) ? datum[\"year\"] : \"\"+datum[\"year\"])"
+              },
+              "x": {"field": {"group": "width"}},
+              "x2": {"value": 0},
+              "y": {"scale": "concat_0_y", "field": "year"},
+              "height": {"signal": "max(0.25, bandwidth('concat_0_y'))"}
+            }
+          }
+        }
+      ],
+      "axes": [
+        {
+          "scale": "concat_0_y",
+          "orient": "left",
+          "grid": false,
+          "title": "Filter by Year",
+          "zindex": 1
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "name": "concat_1_group",
+      "title": {"text": "Decentraland Land Sales", "frame": "group"},
+      "style": "cell",
+      "encode": {
+        "update": {
+          "width": {"signal": "concat_1_width"},
+          "height": {"signal": "concat_1_height"}
+        }
+      },
+      "signals": [
+        {
+          "name": "selector228_X",
+          "on": [
+            {
+              "events": [{"source": "view", "type": "dblclick"}],
+              "update": "null"
+            },
+            {
+              "events": {"signal": "selector228_translate_delta"},
+              "update": "panLinear(selector228_translate_anchor.extent_x, -selector228_translate_delta.x / concat_1_width)"
+            },
+            {
+              "events": {"signal": "selector228_zoom_delta"},
+              "update": "zoomLinear(domain(\"concat_1_x\"), selector228_zoom_anchor.x, selector228_zoom_delta)"
+            }
+          ],
+          "push": "outer"
+        },
+        {
+          "name": "selector228_Y",
+          "on": [
+            {
+              "events": [{"source": "view", "type": "dblclick"}],
+              "update": "null"
+            },
+            {
+              "events": {"signal": "selector228_translate_delta"},
+              "update": "panLinear(selector228_translate_anchor.extent_y, selector228_translate_delta.y / concat_1_height)"
+            },
+            {
+              "events": {"signal": "selector228_zoom_delta"},
+              "update": "zoomLinear(domain(\"concat_1_y\"), selector228_zoom_anchor.y, selector228_zoom_delta)"
+            }
+          ],
+          "push": "outer"
+        },
+        {
+          "name": "selector228_tuple",
+          "on": [
+            {
+              "events": [{"signal": "selector228_X || selector228_Y"}],
+              "update": "selector228_X && selector228_Y ? {unit: \"concat_1_layer_3\", fields: selector228_tuple_fields, values: [selector228_X,selector228_Y]} : null"
+            }
+          ]
+        },
+        {
+          "name": "selector228_tuple_fields",
+          "value": [
+            {"field": "X", "channel": "x", "type": "R"},
+            {"field": "Y", "channel": "y", "type": "R"}
+          ]
+        },
+        {
+          "name": "selector228_translate_anchor",
+          "value": {},
+          "on": [
+            {
+              "events": [{"source": "scope", "type": "mousedown"}],
+              "update": "{x: x(unit), y: y(unit), extent_x: domain(\"concat_1_x\"), extent_y: domain(\"concat_1_y\")}"
+            }
+          ]
+        },
+        {
+          "name": "selector228_translate_delta",
+          "value": {},
+          "on": [
+            {
+              "events": [
+                {
+                  "source": "window",
+                  "type": "mousemove",
+                  "consume": true,
+                  "between": [
+                    {"source": "scope", "type": "mousedown"},
+                    {"source": "window", "type": "mouseup"}
+                  ]
+                }
+              ],
+              "update": "{x: selector228_translate_anchor.x - x(unit), y: selector228_translate_anchor.y - y(unit)}"
+            }
+          ]
+        },
+        {
+          "name": "selector228_zoom_anchor",
+          "on": [
+            {
+              "events": [{"source": "scope", "type": "wheel", "consume": true}],
+              "update": "{x: invert(\"concat_1_x\", x(unit)), y: invert(\"concat_1_y\", y(unit))}"
+            }
+          ]
+        },
+        {
+          "name": "selector228_zoom_delta",
+          "on": [
+            {
+              "events": [{"source": "scope", "type": "wheel", "consume": true}],
+              "force": true,
+              "update": "pow(1.001, event.deltaY * pow(16, event.deltaMode))"
+            }
+          ]
+        },
+        {
+          "name": "selector228_modify",
+          "on": [
+            {
+              "events": {"signal": "selector228_tuple"},
+              "update": "modify(\"selector228_store\", selector228_tuple, true)"
+            }
+          ]
+        }
+      ],
+      "marks": [
+        {
+          "name": "concat_1_layer_0_marks",
+          "type": "symbol",
+          "clip": true,
+          "style": ["circle"],
+          "interactive": true,
+          "from": {"data": "source_1"},
+          "encode": {
+            "update": {
+              "opacity": {"value": 0.1},
+              "fill": {"value": "purple"},
+              "tooltip": {
+                "signal": "{\"District\": isValid(datum[\"District\"]) ? datum[\"District\"] : \"\"+datum[\"District\"]}"
+              },
+              "ariaRoleDescription": {"value": "circle"},
+              "description": {
+                "signal": "\"X: \" + (format(datum[\"X\"], \"\")) + \"; Y: \" + (format(datum[\"Y\"], \"\")) + \"; District: \" + (isValid(datum[\"District\"]) ? datum[\"District\"] : \"\"+datum[\"District\"])"
+              },
+              "x": {"scale": "concat_1_x", "field": "X"},
+              "y": {"scale": "concat_1_y", "field": "Y"},
+              "shape": {"value": "circle"}
+            }
+          }
+        },
+        {
+          "name": "concat_1_layer_1_marks",
+          "type": "symbol",
+          "clip": true,
+          "style": ["circle"],
+          "interactive": true,
+          "from": {"data": "source_2"},
+          "encode": {
+            "update": {
+              "opacity": {"value": 0.1},
+              "fill": {"value": "green"},
+              "tooltip": {
+                "signal": "{\"Plaza\": isValid(datum[\"Plaza\"]) ? datum[\"Plaza\"] : \"\"+datum[\"Plaza\"]}"
+              },
+              "ariaRoleDescription": {"value": "circle"},
+              "description": {
+                "signal": "\"X: \" + (format(datum[\"X\"], \"\")) + \"; Y: \" + (format(datum[\"Y\"], \"\")) + \"; Plaza: \" + (isValid(datum[\"Plaza\"]) ? datum[\"Plaza\"] : \"\"+datum[\"Plaza\"])"
+              },
+              "x": {"scale": "concat_1_x", "field": "X"},
+              "y": {"scale": "concat_1_y", "field": "Y"},
+              "shape": {"value": "circle"}
+            }
+          }
+        },
+        {
+          "name": "concat_1_layer_2_marks",
+          "type": "symbol",
+          "clip": true,
+          "style": ["circle"],
+          "interactive": true,
+          "from": {"data": "source_3"},
+          "encode": {
+            "update": {
+              "opacity": {"value": 0.9},
+              "size": {"value": 5},
+              "fill": {"value": "grey"},
+              "tooltip": {
+                "signal": "{\"Label\": isValid(datum[\"Label\"]) ? datum[\"Label\"] : \"\"+datum[\"Label\"]}"
+              },
+              "ariaRoleDescription": {"value": "circle"},
+              "description": {
+                "signal": "\"X: \" + (format(datum[\"X\"], \"\")) + \"; Y: \" + (format(datum[\"Y\"], \"\")) + \"; Label: \" + (isValid(datum[\"Label\"]) ? datum[\"Label\"] : \"\"+datum[\"Label\"])"
+              },
+              "x": {"scale": "concat_1_x", "field": "X"},
+              "y": {"scale": "concat_1_y", "field": "Y"},
+              "shape": {"value": "circle"}
+            }
+          }
+        },
+        {
+          "name": "concat_1_layer_3_marks",
+          "type": "symbol",
+          "clip": true,
+          "style": ["circle"],
+          "interactive": true,
+          "from": {"data": "data_0"},
+          "encode": {
+            "update": {
+              "opacity": {"value": 0.7},
+              "fill": {
+                "scale": "concat_1_color",
+                "field": "sale price (USD) per parcel"
+              },
+              "tooltip": {
+                "signal": "{\"Date\": timeFormat(datum[\"Date\"], '%b %d, %Y'), \"Closest Plaza\": isValid(datum[\"Closest Plaza\"]) ? datum[\"Closest Plaza\"] : \"\"+datum[\"Closest Plaza\"], \"Closest District\": isValid(datum[\"Closest District\"]) ? datum[\"Closest District\"] : \"\"+datum[\"Closest District\"], \"sale price per parcel (USD)\": format(datum[\"sale price (USD) per parcel\"], \"\"), \"Estate Size\": format(datum[\"Estate Size\"], \"\")}"
+              },
+              "ariaRoleDescription": {"value": "circle"},
+              "description": {
+                "signal": "\"X: \" + (format(datum[\"X\"], \"\")) + \"; Y: \" + (format(datum[\"Y\"], \"\")) + \"; sale price per parcel (USD): \" + (format(datum[\"sale price (USD) per parcel\"], \"\")) + \"; Date: \" + (timeFormat(datum[\"Date\"], '%b %d, %Y')) + \"; Closest Plaza: \" + (isValid(datum[\"Closest Plaza\"]) ? datum[\"Closest Plaza\"] : \"\"+datum[\"Closest Plaza\"]) + \"; Closest District: \" + (isValid(datum[\"Closest District\"]) ? datum[\"Closest District\"] : \"\"+datum[\"Closest District\"]) + \"; Estate Size: \" + (format(datum[\"Estate Size\"], \"\"))"
+              },
+              "x": {"scale": "concat_1_x", "field": "X"},
+              "y": {"scale": "concat_1_y", "field": "Y"},
+              "shape": {"value": "circle"}
+            }
+          }
+        }
+      ],
+      "axes": [
+        {
+          "scale": "concat_1_x",
+          "orient": "bottom",
+          "gridScale": "concat_1_y",
+          "grid": true,
+          "tickCount": {"signal": "ceil(concat_1_width/40)"},
+          "domain": false,
+          "labels": false,
+          "aria": false,
+          "maxExtent": 0,
+          "minExtent": 0,
+          "ticks": false,
+          "zindex": 0
+        },
+        {
+          "scale": "concat_1_y",
+          "orient": "left",
+          "gridScale": "concat_1_x",
+          "grid": true,
+          "tickCount": {"signal": "ceil(concat_1_height/40)"},
+          "domain": false,
+          "labels": false,
+          "aria": false,
+          "maxExtent": 0,
+          "minExtent": 0,
+          "ticks": false,
+          "zindex": 0
+        },
+        {
+          "scale": "concat_1_x",
+          "orient": "bottom",
+          "grid": false,
+          "title": "X",
+          "labelFlush": true,
+          "labelOverlap": true,
+          "tickCount": {"signal": "ceil(concat_1_width/40)"},
+          "zindex": 0
+        },
+        {
+          "scale": "concat_1_y",
+          "orient": "left",
+          "grid": false,
+          "title": "Y",
+          "labelOverlap": true,
+          "tickCount": {"signal": "ceil(concat_1_height/40)"},
+          "zindex": 0
+        }
+      ],
+      "legends": [
+        {
+          "title": "sale price per parcel (USD)",
+          "fill": "concat_1_color",
+          "gradientLength": {"signal": "clamp(concat_1_height, 64, 200)"},
+          "encode": {"gradient": {"update": {"opacity": {"value": 0.7}}}}
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "concat_0_y",
+      "type": "band",
+      "domain": {"data": "source_0", "field": "year", "sort": true},
+      "range": {"step": {"signal": "concat_0_y_step"}},
+      "paddingInner": 0,
+      "paddingOuter": 0
+    },
+    {
+      "name": "concat_0_color",
+      "type": "ordinal",
+      "domain": {"data": "source_0", "field": "year", "sort": true},
+      "range": "category"
+    },
+    {
+      "name": "concat_1_x",
+      "type": "linear",
+      "domain": [-150, 150],
+      "domainRaw": {"signal": "selector228[\"X\"]"},
+      "range": [0, {"signal": "concat_1_width"}],
+      "nice": true,
+      "zero": true
+    },
+    {
+      "name": "concat_1_y",
+      "type": "linear",
+      "domain": [-150, 150],
+      "domainRaw": {"signal": "selector228[\"Y\"]"},
+      "range": [{"signal": "concat_1_height"}, 0],
+      "nice": true,
+      "zero": true
+    },
+    {
+      "name": "concat_1_color",
+      "type": "linear",
+      "domain": [0, 25000],
+      "range": "ramp",
+      "interpolate": "hcl",
+      "zero": true
+    }
+  ],
+  "config": {}
+}
