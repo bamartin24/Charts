@@ -7,7 +7,7 @@
     {"name": "selector228_store"},
     {
       "name": "source_0",
-      "url": "altair-data-3440a0ef57942fb8bd8669f83e679524.json",
+      "url": "https://raw.githubusercontent.com/bamartin24/Charts/main/DecentralandAnalysis/altair-data-3440a0ef57942fb8bd8669f83e679524.json",
       "format": {"type": "json", "parse": {"Date": "date"}}
     },
     {
@@ -26,7 +26,7 @@
     },
     {
       "name": "source_1",
-      "url": "altair-data-f6a0397d736440357bb470ba0772c322.json",
+      "url": "https://raw.githubusercontent.com/bamartin24/Charts/main/DecentralandAnalysis/altair-data-f6a0397d736440357bb470ba0772c322.json",
       "format": {"type": "json"},
       "transform": [
         {
@@ -37,7 +37,7 @@
     },
     {
       "name": "source_2",
-      "url": "altair-data-77fc6fe407f9d0206dfb59fe12088bf7.json",
+      "url": "https://raw.githubusercontent.com/bamartin24/Charts/main/DecentralandAnalysis/altair-data-77fc6fe407f9d0206dfb59fe12088bf7.json",
       "format": {"type": "json"},
       "transform": [
         {
@@ -48,7 +48,7 @@
     },
     {
       "name": "source_3",
-      "url": "altair-data-5d2fe6027d2e5b9ebd39e289a69886e6.json",
+      "url": "https://raw.githubusercontent.com/bamartin24/Charts/main/DecentralandAnalysis/altair-data-5d2fe6027d2e5b9ebd39e289a69886e6.json",
       "format": {"type": "json"},
       "transform": [
         {
