@@ -1,0 +1,402 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "background": "white",
+  "padding": 5,
+  "width": 500,
+  "height": 500,
+  "title": {"text": "Decentraland Land Sales", "frame": "group"},
+  "style": "cell",
+  "data": [
+    {"name": "selector238_store"},
+    {
+      "name": "selector237_store",
+      "values": [
+        {
+          "unit": "layer_3",
+          "fields": [{"type": "E", "field": "sale price (USD) per parcel"}],
+          "values": [0]
+        }
+      ]
+    },
+    {
+      "name": "source_0",
+      "url": "https://raw.githubusercontent.com/bamartin24/Charts/main/DecentralandAnalysis/altair-data-f6a0397d736440357bb470ba0772c322.json",
+      "format": {"type": "json"},
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"X\"]) && isFinite(+datum[\"X\"]) && isValid(datum[\"Y\"]) && isFinite(+datum[\"Y\"])"
+        }
+      ]
+    },
+    {
+      "name": "source_1",
+      "url": "https://raw.githubusercontent.com/bamartin24/Charts/main/DecentralandAnalysis/altair-data-77fc6fe407f9d0206dfb59fe12088bf7.json",
+      "format": {"type": "json"},
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"X\"]) && isFinite(+datum[\"X\"]) && isValid(datum[\"Y\"]) && isFinite(+datum[\"Y\"])"
+        }
+      ]
+    },
+    {
+      "name": "source_2",
+      "url": "https://raw.githubusercontent.com/bamartin24/Charts/main/DecentralandAnalysis/altair-data-5d2fe6027d2e5b9ebd39e289a69886e6.json",
+      "format": {"type": "json"},
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"X\"]) && isFinite(+datum[\"X\"]) && isValid(datum[\"Y\"]) && isFinite(+datum[\"Y\"])"
+        }
+      ]
+    },
+    {
+      "name": "source_3",
+      "url": "https://raw.githubusercontent.com/bamartin24/Charts/main/DecentralandAnalysis/altair-data-3440a0ef57942fb8bd8669f83e679524.json",
+      "format": {"type": "json", "parse": {"Date": "date"}},
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "(datum['sale price (USD) per parcel'] > selector237['sale price (USD) per parcel'])"
+        },
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"X\"]) && isFinite(+datum[\"X\"]) && isValid(datum[\"Y\"]) && isFinite(+datum[\"Y\"]) && isValid(datum[\"sale price (USD) per parcel\"]) && isFinite(+datum[\"sale price (USD) per parcel\"])"
+        }
+      ]
+    }
+  ],
+  "signals": [
+    {
+      "name": "unit",
+      "value": {},
+      "on": [
+        {"events": "mousemove", "update": "isTuple(group()) ? group() : unit"}
+      ]
+    },
+    {
+      "name": "selector237_sale_price__USD__per_parcel",
+      "init": "0",
+      "bind": {
+        "input": "range",
+        "max": 50000,
+        "min": 0,
+        "name": "Show sales with a per parcel price (USD) greater than:",
+        "step": 10
+      }
+    },
+    {
+      "name": "selector238",
+      "update": "vlSelectionResolve(\"selector238_store\", \"union\")"
+    },
+    {
+      "name": "selector237",
+      "update": "vlSelectionResolve(\"selector237_store\", \"union\", true, true)"
+    },
+    {
+      "name": "selector238_X",
+      "on": [
+        {"events": [{"source": "view", "type": "dblclick"}], "update": "null"},
+        {
+          "events": {"signal": "selector238_translate_delta"},
+          "update": "panLinear(selector238_translate_anchor.extent_x, -selector238_translate_delta.x / width)"
+        },
+        {
+          "events": {"signal": "selector238_zoom_delta"},
+          "update": "zoomLinear(domain(\"x\"), selector238_zoom_anchor.x, selector238_zoom_delta)"
+        }
+      ]
+    },
+    {
+      "name": "selector238_Y",
+      "on": [
+        {"events": [{"source": "view", "type": "dblclick"}], "update": "null"},
+        {
+          "events": {"signal": "selector238_translate_delta"},
+          "update": "panLinear(selector238_translate_anchor.extent_y, selector238_translate_delta.y / height)"
+        },
+        {
+          "events": {"signal": "selector238_zoom_delta"},
+          "update": "zoomLinear(domain(\"y\"), selector238_zoom_anchor.y, selector238_zoom_delta)"
+        }
+      ]
+    },
+    {
+      "name": "selector238_tuple",
+      "on": [
+        {
+          "events": [{"signal": "selector238_X || selector238_Y"}],
+          "update": "selector238_X && selector238_Y ? {unit: \"layer_3\", fields: selector238_tuple_fields, values: [selector238_X,selector238_Y]} : null"
+        }
+      ]
+    },
+    {
+      "name": "selector238_tuple_fields",
+      "value": [
+        {"field": "X", "channel": "x", "type": "R"},
+        {"field": "Y", "channel": "y", "type": "R"}
+      ]
+    },
+    {
+      "name": "selector238_translate_anchor",
+      "value": {},
+      "on": [
+        {
+          "events": [{"source": "scope", "type": "mousedown"}],
+          "update": "{x: x(unit), y: y(unit), extent_x: domain(\"x\"), extent_y: domain(\"y\")}"
+        }
+      ]
+    },
+    {
+      "name": "selector238_translate_delta",
+      "value": {},
+      "on": [
+        {
+          "events": [
+            {
+              "source": "window",
+              "type": "mousemove",
+              "consume": true,
+              "between": [
+                {"source": "scope", "type": "mousedown"},
+                {"source": "window", "type": "mouseup"}
+              ]
+            }
+          ],
+          "update": "{x: selector238_translate_anchor.x - x(unit), y: selector238_translate_anchor.y - y(unit)}"
+        }
+      ]
+    },
+    {
+      "name": "selector238_zoom_anchor",
+      "on": [
+        {
+          "events": [{"source": "scope", "type": "wheel", "consume": true}],
+          "update": "{x: invert(\"x\", x(unit)), y: invert(\"y\", y(unit))}"
+        }
+      ]
+    },
+    {
+      "name": "selector238_zoom_delta",
+      "on": [
+        {
+          "events": [{"source": "scope", "type": "wheel", "consume": true}],
+          "force": true,
+          "update": "pow(1.001, event.deltaY * pow(16, event.deltaMode))"
+        }
+      ]
+    },
+    {
+      "name": "selector238_modify",
+      "on": [
+        {
+          "events": {"signal": "selector238_tuple"},
+          "update": "modify(\"selector238_store\", selector238_tuple, true)"
+        }
+      ]
+    },
+    {
+      "name": "selector237_tuple",
+      "update": "selector237_sale_price__USD__per_parcel !== null ? {fields: selector237_tuple_fields, values: [selector237_sale_price__USD__per_parcel]} : null"
+    },
+    {
+      "name": "selector237_tuple_fields",
+      "value": [{"type": "E", "field": "sale price (USD) per parcel"}]
+    },
+    {
+      "name": "selector237_modify",
+      "on": [
+        {
+          "events": {"signal": "selector237_tuple"},
+          "update": "modify(\"selector237_store\", selector237_tuple, true)"
+        }
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "name": "layer_0_marks",
+      "type": "symbol",
+      "clip": true,
+      "style": ["circle"],
+      "interactive": true,
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "opacity": {"value": 0.1},
+          "fill": {"value": "purple"},
+          "tooltip": {
+            "signal": "{\"District\": isValid(datum[\"District\"]) ? datum[\"District\"] : \"\"+datum[\"District\"]}"
+          },
+          "ariaRoleDescription": {"value": "circle"},
+          "description": {
+            "signal": "\"X: \" + (format(datum[\"X\"], \"\")) + \"; Y: \" + (format(datum[\"Y\"], \"\")) + \"; District: \" + (isValid(datum[\"District\"]) ? datum[\"District\"] : \"\"+datum[\"District\"])"
+          },
+          "x": {"scale": "x", "field": "X"},
+          "y": {"scale": "y", "field": "Y"},
+          "shape": {"value": "circle"}
+        }
+      }
+    },
+    {
+      "name": "layer_1_marks",
+      "type": "symbol",
+      "clip": true,
+      "style": ["circle"],
+      "interactive": true,
+      "from": {"data": "source_1"},
+      "encode": {
+        "update": {
+          "opacity": {"value": 0.1},
+          "fill": {"value": "green"},
+          "tooltip": {
+            "signal": "{\"Plaza\": isValid(datum[\"Plaza\"]) ? datum[\"Plaza\"] : \"\"+datum[\"Plaza\"]}"
+          },
+          "ariaRoleDescription": {"value": "circle"},
+          "description": {
+            "signal": "\"X: \" + (format(datum[\"X\"], \"\")) + \"; Y: \" + (format(datum[\"Y\"], \"\")) + \"; Plaza: \" + (isValid(datum[\"Plaza\"]) ? datum[\"Plaza\"] : \"\"+datum[\"Plaza\"])"
+          },
+          "x": {"scale": "x", "field": "X"},
+          "y": {"scale": "y", "field": "Y"},
+          "shape": {"value": "circle"}
+        }
+      }
+    },
+    {
+      "name": "layer_2_marks",
+      "type": "symbol",
+      "clip": true,
+      "style": ["circle"],
+      "interactive": true,
+      "from": {"data": "source_2"},
+      "encode": {
+        "update": {
+          "opacity": {"value": 0.9},
+          "size": {"value": 5},
+          "fill": {"value": "grey"},
+          "tooltip": {
+            "signal": "{\"Label\": isValid(datum[\"Label\"]) ? datum[\"Label\"] : \"\"+datum[\"Label\"]}"
+          },
+          "ariaRoleDescription": {"value": "circle"},
+          "description": {
+            "signal": "\"X: \" + (format(datum[\"X\"], \"\")) + \"; Y: \" + (format(datum[\"Y\"], \"\")) + \"; Label: \" + (isValid(datum[\"Label\"]) ? datum[\"Label\"] : \"\"+datum[\"Label\"])"
+          },
+          "x": {"scale": "x", "field": "X"},
+          "y": {"scale": "y", "field": "Y"},
+          "shape": {"value": "circle"}
+        }
+      }
+    },
+    {
+      "name": "layer_3_marks",
+      "type": "symbol",
+      "clip": true,
+      "style": ["circle"],
+      "interactive": true,
+      "from": {"data": "source_3"},
+      "encode": {
+        "update": {
+          "opacity": {"value": 0.7},
+          "fill": {"scale": "color", "field": "sale price (USD) per parcel"},
+          "tooltip": {
+            "signal": "{\"Date\": timeFormat(datum[\"Date\"], '%b %d, %Y'), \"Closest Plaza\": isValid(datum[\"Closest Plaza\"]) ? datum[\"Closest Plaza\"] : \"\"+datum[\"Closest Plaza\"], \"Closest District\": isValid(datum[\"Closest District\"]) ? datum[\"Closest District\"] : \"\"+datum[\"Closest District\"], \"sale price (USD) per parcel\": format(datum[\"sale price (USD) per parcel\"], \"\"), \"Estate Size\": format(datum[\"Estate Size\"], \"\")}"
+          },
+          "ariaRoleDescription": {"value": "circle"},
+          "description": {
+            "signal": "\"X: \" + (format(datum[\"X\"], \"\")) + \"; Y: \" + (format(datum[\"Y\"], \"\")) + \"; sale price (USD) per parcel: \" + (format(datum[\"sale price (USD) per parcel\"], \"\")) + \"; Date: \" + (timeFormat(datum[\"Date\"], '%b %d, %Y')) + \"; Closest Plaza: \" + (isValid(datum[\"Closest Plaza\"]) ? datum[\"Closest Plaza\"] : \"\"+datum[\"Closest Plaza\"]) + \"; Closest District: \" + (isValid(datum[\"Closest District\"]) ? datum[\"Closest District\"] : \"\"+datum[\"Closest District\"]) + \"; Estate Size: \" + (format(datum[\"Estate Size\"], \"\"))"
+          },
+          "x": {"scale": "x", "field": "X"},
+          "y": {"scale": "y", "field": "Y"},
+          "shape": {"value": "circle"}
+        }
+      }
+    }
+  ],
+  "scales": [
+    {
+      "name": "x",
+      "type": "linear",
+      "domain": [-150, 150],
+      "domainRaw": {"signal": "selector238[\"X\"]"},
+      "range": [0, {"signal": "width"}],
+      "nice": true,
+      "zero": true
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "domain": [-150, 150],
+      "domainRaw": {"signal": "selector238[\"Y\"]"},
+      "range": [{"signal": "height"}, 0],
+      "nice": true,
+      "zero": true
+    },
+    {
+      "name": "color",
+      "type": "linear",
+      "domain": [0, 25000],
+      "range": "ramp",
+      "interpolate": "hcl",
+      "zero": true
+    }
+  ],
+  "axes": [
+    {
+      "scale": "x",
+      "orient": "bottom",
+      "gridScale": "y",
+      "grid": true,
+      "tickCount": {"signal": "ceil(width/40)"},
+      "domain": false,
+      "labels": false,
+      "aria": false,
+      "maxExtent": 0,
+      "minExtent": 0,
+      "ticks": false,
+      "zindex": 0
+    },
+    {
+      "scale": "y",
+      "orient": "left",
+      "gridScale": "x",
+      "grid": true,
+      "tickCount": {"signal": "ceil(height/40)"},
+      "domain": false,
+      "labels": false,
+      "aria": false,
+      "maxExtent": 0,
+      "minExtent": 0,
+      "ticks": false,
+      "zindex": 0
+    },
+    {
+      "scale": "x",
+      "orient": "bottom",
+      "grid": false,
+      "title": "X",
+      "labelFlush": true,
+      "labelOverlap": true,
+      "tickCount": {"signal": "ceil(width/40)"},
+      "zindex": 0
+    },
+    {
+      "scale": "y",
+      "orient": "left",
+      "grid": false,
+      "title": "Y",
+      "labelOverlap": true,
+      "tickCount": {"signal": "ceil(height/40)"},
+      "zindex": 0
+    }
+  ],
+  "legends": [
+    {
+      "fill": "color",
+      "gradientLength": {"signal": "clamp(height, 64, 200)"},
+      "title": "sale price (USD) per parcel",
+      "encode": {"gradient": {"update": {"opacity": {"value": 0.7}}}}
+    }
+  ],
+  "config": {}
+}
