@@ -300,11 +300,11 @@
           "opacity": {"value": 0.7},
           "fill": {"scale": "color", "field": "sale price (USD) per parcel"},
           "tooltip": {
-            "signal": "{\"Date\": timeFormat(datum[\"Date\"], '%b %d, %Y'), \"Closest Plaza\": isValid(datum[\"Closest Plaza\"]) ? datum[\"Closest Plaza\"] : \"\"+datum[\"Closest Plaza\"], \"Closest District\": isValid(datum[\"Closest District\"]) ? datum[\"Closest District\"] : \"\"+datum[\"Closest District\"], \"sale price (USD) per parcel\": format(datum[\"sale price (USD) per parcel\"], \"\"), \"Estate Size\": format(datum[\"Estate Size\"], \"\")}"
+            "signal": "{\"Date\": timeFormat(datum[\"Date\"], '%b %d, %Y'), \"Closest Plaza\": isValid(datum[\"Closest Plaza\"]) ? datum[\"Closest Plaza\"] : \"\"+datum[\"Closest Plaza\"], \"Closest District\": isValid(datum[\"Closest District\"]) ? datum[\"Closest District\"] : \"\"+datum[\"Closest District\"], \"sale price per parcel (USD)\": format(datum[\"sale price (USD) per parcel\"], \"\"), \"Estate Size\": format(datum[\"Estate Size\"], \"\")}"
           },
           "ariaRoleDescription": {"value": "circle"},
           "description": {
-            "signal": "\"X: \" + (format(datum[\"X\"], \"\")) + \"; Y: \" + (format(datum[\"Y\"], \"\")) + \"; sale price (USD) per parcel: \" + (format(datum[\"sale price (USD) per parcel\"], \"\")) + \"; Date: \" + (timeFormat(datum[\"Date\"], '%b %d, %Y')) + \"; Closest Plaza: \" + (isValid(datum[\"Closest Plaza\"]) ? datum[\"Closest Plaza\"] : \"\"+datum[\"Closest Plaza\"]) + \"; Closest District: \" + (isValid(datum[\"Closest District\"]) ? datum[\"Closest District\"] : \"\"+datum[\"Closest District\"]) + \"; Estate Size: \" + (format(datum[\"Estate Size\"], \"\"))"
+            "signal": "\"X: \" + (format(datum[\"X\"], \"\")) + \"; Y: \" + (format(datum[\"Y\"], \"\")) + \"; sale price per parcel (USD): \" + (format(datum[\"sale price (USD) per parcel\"], \"\")) + \"; Date: \" + (timeFormat(datum[\"Date\"], '%b %d, %Y')) + \"; Closest Plaza: \" + (isValid(datum[\"Closest Plaza\"]) ? datum[\"Closest Plaza\"] : \"\"+datum[\"Closest Plaza\"]) + \"; Closest District: \" + (isValid(datum[\"Closest District\"]) ? datum[\"Closest District\"] : \"\"+datum[\"Closest District\"]) + \"; Estate Size: \" + (format(datum[\"Estate Size\"], \"\"))"
           },
           "x": {"scale": "x", "field": "X"},
           "y": {"scale": "y", "field": "Y"},
@@ -392,9 +392,9 @@
   ],
   "legends": [
     {
+      "title": "sale price per parcel (USD)",
       "fill": "color",
       "gradientLength": {"signal": "clamp(height, 64, 200)"},
-      "title": "sale price (USD) per parcel",
       "encode": {"gradient": {"update": {"opacity": {"value": 0.7}}}}
     }
   ],
